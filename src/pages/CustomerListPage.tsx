@@ -21,6 +21,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { usePostHog } from 'posthog-js/react';
 
 const CustomerListPage: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -30,6 +31,7 @@ const CustomerListPage: React.FC = () => {
     null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const posthog = usePostHog();
 
   function maskCustomerId(id: string) {
     if (!id) return '';
@@ -183,6 +185,10 @@ const CustomerListPage: React.FC = () => {
                         type='button'
                         onClick={() => {
                           openModal(customer);
+                          posthog.capture('customerClicked', {
+                            customer_id: customer.customerId,
+                            rm_id: 'rm-id-123',
+                          });
                         }}
                         className='underline-offset-4 hover:underline'
                       >
