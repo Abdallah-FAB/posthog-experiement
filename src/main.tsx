@@ -8,20 +8,29 @@ import App from './App.tsx'; // This will be our main layout or a redirect to th
 // Placeholder components for now
 import CustomerListPage from './pages/CustomerListPage.tsx';
 import CustomerDetailsPage from './pages/CustomerDetailsPage.tsx';
+import { PostHogProvider } from 'posthog-js/react';
 
 initClarity();
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<App />} />
-        <Route path='/customers' element={<CustomerListPage />} />
-        <Route
-          path='/customers/:customerId'
-          element={<CustomerDetailsPage />}
-        />
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>
+  <PostHogProvider
+    options={{
+      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+      defaults: '2025-05-24',
+    }}
+    apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+  >
+    <StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<App />} />
+          <Route path='/customers' element={<CustomerListPage />} />
+          <Route
+            path='/customers/:customerId'
+            element={<CustomerDetailsPage />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </StrictMode>
+  </PostHogProvider>
 );
