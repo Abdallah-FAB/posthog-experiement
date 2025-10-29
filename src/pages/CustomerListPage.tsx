@@ -182,7 +182,14 @@ const CustomerListPage: React.FC = () => {
                     <TableCell>
                       <button
                         type='button'
-                        onClick={() => openModal(customer)}
+                        onClick={() => {
+                          openModal(customer);
+                          trackEvent('customerPageViewed', {
+                            page: 'customerListPage',
+                            rmId: 'my-custom-rm-id-123',
+                            viewMode,
+                          });
+                        }}
                         className='underline-offset-4 hover:underline'
                       >
                         {getDisplayedId(customer.customerId)}
