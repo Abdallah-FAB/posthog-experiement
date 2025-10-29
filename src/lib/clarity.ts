@@ -17,12 +17,25 @@ export function initClarity(): void {
   }
 }
 
-export function trackEvent(
-  event: string,
-  properties?: Record<string, any>
-): void {
-  if (typeof window === 'undefined') return;
-  if (import.meta.env.MODE === 'test') return;
-
-  clarity.track(event, properties);
-}
+export const clarityClient = {
+  identify: (
+    customerId: string,
+    sessionId: string,
+    pageId: string,
+    friendlyName: string
+  ) => {
+    clarity.identify(customerId, sessionId, pageId, friendlyName);
+  },
+  track: (event: string) => {
+    clarity.event(event);
+  },
+  consent: (consent: boolean) => {
+    clarity.consent(consent);
+  },
+  upgrade: (reason: string) => {
+    clarity.upgrade(reason);
+  },
+  setTag: (key: string, value: string) => {
+    clarity.setTag(key, value);
+  },
+};

@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 // import { Link } from 'react-router-dom';
+import { clarityClient } from '../lib/clarity.ts';
 
 const CustomerListPage: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -125,6 +126,12 @@ const CustomerListPage: React.FC = () => {
     };
 
     fetchCustomers();
+    clarityClient.identify(
+      'rm-id-123',
+      'session-id-123',
+      'customerListPage',
+      'Customer List Page'
+    );
   }, []);
 
   return (
@@ -184,11 +191,15 @@ const CustomerListPage: React.FC = () => {
                         type='button'
                         onClick={() => {
                           openModal(customer);
-                          trackEvent('customerPageViewed', {
-                            page: 'customerListPage',
-                            rmId: 'my-custom-rm-id-123',
-                            viewMode,
-                          });
+                          clarityClient.setTag(
+                            'customerPageViewed',
+                            'rm-id-123'
+                          );
+                          clarityClient.setTag(
+                            'customerViewed',
+                            customer.customerId
+                          );
+                          clarityClient.setTag('viewMode', viewMode);
                         }}
                         className='underline-offset-4 hover:underline'
                       >
