@@ -13,14 +13,16 @@ import { PostHogProvider } from 'posthog-js/react';
 initClarity();
 
 createRoot(document.getElementById('root')!).render(
-  <PostHogProvider
-    options={{
-      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-      defaults: '2025-05-24',
-    }}
-    apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
-  >
-    <StrictMode>
+  <StrictMode>
+    <PostHogProvider
+      apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+      options={{
+        api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+        defaults: '2025-05-24',
+        capture_exceptions: true,
+        debug: import.meta.env.MODE === 'development',
+      }}
+    >
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<App />} />
@@ -31,6 +33,6 @@ createRoot(document.getElementById('root')!).render(
           />
         </Routes>
       </BrowserRouter>
-    </StrictMode>
-  </PostHogProvider>
+    </PostHogProvider>
+  </StrictMode>
 );
